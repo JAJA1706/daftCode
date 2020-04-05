@@ -19,17 +19,15 @@ def root():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
 
-@app.get("/patient/{pk}")#, response_model=what)
+@app.get("/patient/{pk}")
 async def patients(pk: int):
     for lol in lista:
         if pk in lista:
-            return(lista[lol])
+            return(lista[lol+1])
     return JSONResponse(status_code=204, content={})
     
     
        
-        
-   # return patient(id=app.counter, patient = pt)
 
 @app.post("/patient", response_model=patient)
 async def patients(pt: request):
