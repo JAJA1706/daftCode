@@ -23,7 +23,7 @@ async def patients(pk: int):
     for lol in lista:
         if pk in lista:
             return(lista[lol])
-    return ("204")
+    return ("status_code=204")
     
     
        
