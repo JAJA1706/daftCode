@@ -33,19 +33,10 @@ async def patients(pk: int):
 
 @app.post("/patient", response_model=patient)
 async def patients(pt: request):
-    app.counter += 1
     lista.append(app.counter)
     lista.append(pt)
+    app.counter += 1
     return patient(id=app.counter, patient = pt)
     
        
-        
-   # return patient(id=app.counter, patient = pt)
-
-@app.post("/patient", response_model=patient)
-async def patients(pt: request):
-    app.counter += 1
-    lista.append(app.counter)
-    lista.append(pt)
-    return patient(id=app.counter, patient = pt)
 
