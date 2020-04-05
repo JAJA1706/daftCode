@@ -10,18 +10,13 @@ class request(BaseModel):
     
 class patient(BaseModel):
     id: int
-    rec: request
+    patient: request
 
 @app.get("/")
 def root():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
-@app.get('/counter')
-def counter():
-    app.counter += 1
-    return str(app.counter)
-
 @app.post("/patient", response_model=patient)
-async def patients(rq: request):
+async def patients(pt: request):
     app.counter += 1
-    return patient(id = app.counter, rec = rq)
+    return patient(id=app.counter, patient = pt)
