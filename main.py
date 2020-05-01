@@ -60,7 +60,7 @@ async def read_album( album_id: int ):
     cursor.row_factory = sqlite3.Row
     album = cursor.execute(
         "SELECT * FROM albums WHERE albumid = ?", (album_id,)).fetchall()
-    return album
+    return JSONResponse(status_code = 200, content={"AlbumId": album_id, "Title": album[0][1], "ArtistId": album[0][2]})
     
         
     
