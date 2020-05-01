@@ -23,7 +23,7 @@ async def read_data( composer_name: str ):
     #cursor.row_factory = sqlite3.Row
     cursor.row_factory = lambda cursor, x: x[0]
     data = cursor.execute(
-        "SELECT name FROM tracks WHERE composer = ?",
+        "SELECT name FROM tracks WHERE composer = ? ORDER BY name",
         (composer_name,)).fetchall()
     if len(data) == 0:
         return JSONResponse(status_code = 404, content={"detail":{ "error": composer_name} })
