@@ -17,12 +17,13 @@ async def shutdown():
 def root():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
-@app.get("/tracks/{page,per_page}")
+@app.get("/tracks/")
 async def read_data(page: int = 0, per_page: int = 10):
     cursor = app.db_connection.cursor()
+    page_number = page * per_page
     data = cursor.execute(
         "SELECT * FROM tracks WHERE ((trackid >= ?) AND (trackid < ?)) ORDER BY trackid ASC",
-        (page, page + per_page)).fetchmany(per_page)
+        (page_number, page_number + per_page)).fetchmany(per_page)
     return data
         
 
