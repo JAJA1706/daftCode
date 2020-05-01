@@ -20,10 +20,9 @@ def root():
 @app.get("/tracks/")
 async def read_data(page: int = 0, per_page: int = 10):
     cursor = app.db_connection.cursor()
-    page_number = page * per_page
     data = cursor.execute(
-        "SELECT * FROM tracks WHERE ((trackid >= ?) AND (trackid < ?)) ORDER BY trackid ASC",
-        (page_number, page_number + per_page)).fetchmany(per_page)
+        "SELECT * FROM tracks ORDER BY trackid ASC LIMIT ? OFFSET ?",
+        (per_page, page*per_page)).fetchmany(per_page)
     return data
         
 
