@@ -22,7 +22,7 @@ async def read_data(page: int = 0, per_page: int = 10):
     cursor = app.db_connection.cursor()
     data = cursor.execute(
         "SELECT * FROM tracks ORDER BY trackid ASC LIMIT ? OFFSET ?",
-        (per_page, page*per_page)).fetchmany(per_page)
+        (per_page, page*per_page)).fetchall()
     return data
         
 
