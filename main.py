@@ -21,11 +21,12 @@ def root():
 async def read_data( composer_name: str ):
     cursor = app.db_connection.cursor()
     #cursor.row_factory = sqlite3.Row
+    cursor.row_factory = lambda cursor, x: x[0]
     data = cursor.execute(
         "SELECT name FROM tracks WHERE composer = ?",
         (composer_name,)).fetchall()
     if len(data) == 0:
-        return JSONResponse(status_code = 404, content={"error": composer_name})
+        return JSONResponse(status_code = 404, content={"detail":{ "error": composer_name} })
     else:
         return data
 
