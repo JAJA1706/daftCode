@@ -1,40 +1,28 @@
+import sqlite3
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 
 app = FastAPI()
-app.counter = 0
-lista = []
 
-class request(BaseModel):
-    name: str
-    surename: str
+@app.on_event("startup")
+async def startup():
+    app.db_connection = sqlite3.connect('chinook.db')
     
-class patient(BaseModel):
-    id: int
-    patient: request
+@app.on_event("shutdown")
+async def shutdown():
+    app.db_connection.close()
 
 @app.get("/")
 def root():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
-
-@app.get("/patient/{pk}")
-async def patients(pk: int):
-    for lol in lista:
-        if pk in lista:
-            return(lista[lol+1])
-    return JSONResponse(status_code=204, content={})
-    
-    #looool
-       
-
-@app.post("/patient", response_model=patient)
-async def patients(pt: request):
-    lista.append(app.counter)
-    lista.append(pt)
-    app.counter += 1
-    return patient(id=app.counter, patient = pt)
-    
-       
+@app.get("/tracks/{page,per_page}")
+async def read_data(page: int = 0, per_page: int = 10):
+    cursor = app.db_connection.cursor()
+    data = cursor.execute(
+        "SELECT * FROM tracks WHERE ((trackid >= ?) AND (trackid < ?)) ORDER BY trackid ASC",
+        (page, page + per_page)).fetchmany(per_page)
+    return data
+        
 
