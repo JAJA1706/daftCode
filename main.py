@@ -20,6 +20,7 @@ def root():
 @app.get("/tracks/")
 async def read_data(page: int = 0, per_page: int = 10):
     cursor = app.db_connection.cursor()
+    cursor.row_factory = sqlite3.Row
     data = cursor.execute(
         "SELECT * FROM tracks ORDER BY trackid ASC LIMIT ? OFFSET ?",
         (per_page, page*per_page)).fetchall()
