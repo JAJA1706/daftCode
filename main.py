@@ -26,7 +26,7 @@ async def patients(pk: int):
             return(lista[lol+1])
     return JSONResponse(status_code=204, content={})
     
-    
+    #looool
        
 
 @app.post("/patient", response_model=patient)
