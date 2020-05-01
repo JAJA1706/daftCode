@@ -17,13 +17,15 @@ async def shutdown():
 def root():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
-@app.get("/tracks/")
-async def read_data(page: int = 0, per_page: int = 10):
+@app.get("/tracks/composers/")
+async def read_data( composer_name: str ):
     cursor = app.db_connection.cursor()
-    cursor.row_factory = sqlite3.Row
+    #cursor.row_factory = sqlite3.Row
     data = cursor.execute(
-        "SELECT * FROM tracks ORDER BY trackid ASC LIMIT ? OFFSET ?",
-        (per_page, page*per_page)).fetchall()
-    return data
-        
+        "SELECT name FROM tracks WHERE composer = ?",
+        (composer_name,)).fetchall()
+    if len(data) == 0:
+        return JSONResponse(status_code = 404, content={"error": composer_name})
+    else:
+        return data
 
