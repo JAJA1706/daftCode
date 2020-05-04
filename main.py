@@ -118,3 +118,16 @@ async def update_cust(customer_id: int, cust: Customer):
     customer = cursor.execute(
         "SELECT * FROM customers WHERE customerid = ?", (customer_id,)).fetchone()
     return customer
+    
+@app.get("/sales")
+async def statistics( category: str ):
+    if( category == "customers" ):
+        cursor = app.db_connection.cursor()
+        cursor.row_factory = sqlite3.Row
+        stat = cursor.execute(
+        "SELECT cus.customerid as CustomerId, email, phone, ROUND( SUM(total), 2 ) AS Sum FROM customers cus JOIN invoices inv ON(cus.customerid = inv.customerid) GROUP BY cus.customerid ORDER BY Sum DESC, cus.customerid DESC"
+        ).fetchall()
+        return stat
+    else:
+        return JSONResponse(status_code = 404, content={"detail":{ "error": "Podales zle category"} })
+        
