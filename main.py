@@ -19,13 +19,13 @@ class Album(BaseModel):
     artist_id: int
 
 class Customer(BaseModel):
-    Company: str = None
-    Address: str = None
-    City: str = None
-    State: str = None
-    Country: str = None
-    PostalCode: str = None
-    Fax: str = None
+    company: str = None
+    address: str = None
+    city: str = None
+    state: str = None
+    country: str = None
+    postalCode: str = None
+    fax: str = None
 
 @app.get("/")
 def root():
