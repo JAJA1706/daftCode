@@ -71,6 +71,14 @@ async def read_album( album_id: int ):
         "SELECT * FROM albums WHERE albumid = ?", (album_id,)).fetchall()
     return JSONResponse(status_code = 200, content={"AlbumId": album_id, "Title": album[0][1], "ArtistId": album[0][2]})
     
+@app.get("/customers/read/{customer_id}")
+async def read_customer( customer_id: int ):
+    cursor = app.db_connection.cursor()
+    cursor.row_factory = sqlite3.Row
+    customer = cursor.execute(
+        "SELECT * FROM customers WHERE customerid = ?", (customer_id,)).fetchall()
+    return customer;
+    
     
 @app.put("/customers/{customer_id}")
 async def update_cust(customer_id: int, cust: Customer):
@@ -87,7 +95,6 @@ async def update_cust(customer_id: int, cust: Customer):
     znaleziony = False
     dict_key_list = cust_select.keys()
     update_cust = cust.dict(exclude_unset=True)
-    temp = "huk"
     for x,y in update_cust.items():
         lista_key.append(x)
         lista_value.append(y)
@@ -109,18 +116,5 @@ async def update_cust(customer_id: int, cust: Customer):
     )
     app.db_connection.commit()
     customer = cursor.execute(
-        "SELECT * FROM customers WHERE customerid = ?", (customer_id,)).fetchall()
-    return JSONResponse(status_code = 200, content={
-        "CustomerId": customer[0][0],
-        "FirstName": customer[0][1],
-        "LastName": customer[0][2],
-        "Company": customer[0][3],
-        "Address": customer[0][4],
-        "City": customer[0][5],
-        "State": customer[0][6],
-        "Country": customer[0][7],
-        "PostalCode": customer[0][8],
-        "Phone": customer[0][9],
-        "Fax": customer[0][10],
-        "Email": customer[0][11],
-        "SupportRepId": customer[0][12]})
+        "SELECT * FROM customers WHERE customerid = ?", (customer_id,)).fetchone()
+    return customer
