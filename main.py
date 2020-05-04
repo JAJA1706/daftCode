@@ -125,7 +125,14 @@ async def statistics( category: str ):
         cursor = app.db_connection.cursor()
         cursor.row_factory = sqlite3.Row
         stat = cursor.execute(
-        "SELECT cus.customerid as CustomerId, email, phone, ROUND( SUM(total), 2 ) AS Sum FROM customers cus JOIN invoices inv ON(cus.customerid = inv.customerid) GROUP BY cus.customerid ORDER BY Sum DESC, cus.customerid DESC"
+        "SELECT cus.customerid as CustomerId, email, phone, ROUND( SUM(total), 2 ) AS Sum FROM customers cus JOIN invoices inv ON(cus.customerid = inv.customerid) GROUP BY cus.customerid ORDER BY Sum DESC, cus.customerid ASC"
+        ).fetchall()
+        return stat
+    elif( category == "genres"):
+        cursor = app.db_connection.cursor()
+        cursor.row_factory = sqlite3.Row
+        stat = cursor.execute(
+        "SELECT ge.name, SUM(Quantity) AS Sum FROM genres ge JOIN tracks tr ON(ge.genreid = tr.genreid) JOIN invoice_items ii ON(ii.trackid = tr.trackid) GROUP BY ge.genreid ORDER BY Sum DESC, ge.name"
         ).fetchall()
         return stat
     else:
