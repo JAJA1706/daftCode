@@ -81,8 +81,6 @@ async def update_cust(customer_id: int, cust: Customer):
     if cust_select is None:
         return JSONResponse(status_code = 404, content={"detail":{ "error": "Podales zle id customer"} })
         
-    #zamiana na dict
-    #dict_cust_select = dict(customerid=cust_select[0][0], firstname=cust_select[0][1], lastname=cust_select[0][2], company=cust_select[0][3], address=cust_select[0][4], city=cust_select[0][5], state=cust_select[0][6], country=cust_select[0][7], postalcode=cust_select[0][8], phone=cust_select[0][9], )
     lista_key = []
     lista_value = []
     lista_end = []
