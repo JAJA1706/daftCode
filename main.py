@@ -115,14 +115,13 @@ async def update_cust(customer_id: int, cust: Customer):
         for x,y in cust:
             if dict_key_list[i] == fdict(x):
                 for z in lista_key:
-                    if z == x:
+                    if z == fdict(x):
                         znaleziony = True
                 if znaleziony == True:
                     lista_end.append(y)
                     znaleziony = False
                 else:
                     lista_end.append( cust_select[i] )
-            
     cursor.execute(
         "UPDATE customers SET company = ?, address = ?,  city = ?, state = ?, country = ?, postalcode = ?, fax = ?  WHERE customerid = ?", ( lista_end[0], lista_end[1], lista_end[2], lista_end[3], lista_end[4], lista_end[5], lista_end[6], customer_id,)
     )
