@@ -24,8 +24,19 @@ class Customer(BaseModel):
     city: str = None
     state: str = None
     country: str = None
-    postalCode: str = None
+    postalcode: str = None
     fax: str = None
+
+def fdict(x):
+    return{
+        'company': 'Company',
+        'address': 'Address',
+        'city': 'City',
+        'state': 'State',
+        'country': 'Country',
+        'postalcode': 'PostalCode',
+        'fax': 'Fax',
+    }[x]
 
 @app.get("/")
 def root():
@@ -96,12 +107,13 @@ async def update_cust(customer_id: int, cust: Customer):
     dict_key_list = cust_select.keys()
     update_cust = cust.dict(exclude_unset=True)
     for x,y in update_cust.items():
-        lista_key.append(x)
+        temp = fdict(x)
+        lista_key.append(temp)
         lista_value.append(y)
-        
+    
     for i in range(13):
         for x,y in cust:
-            if dict_key_list[i] == x:
+            if dict_key_list[i] == fdict(x):
                 for z in lista_key:
                     if z == x:
                         znaleziony = True
@@ -110,6 +122,7 @@ async def update_cust(customer_id: int, cust: Customer):
                     znaleziony = False
                 else:
                     lista_end.append( cust_select[i] )
+    return lista_end
             
     cursor.execute(
         "UPDATE customers SET company = ?, address = ?,  city = ?, state = ?, country = ?, postalcode = ?, fax = ?  WHERE customerid = ?", ( lista_end[0], lista_end[1], lista_end[2], lista_end[3], lista_end[4], lista_end[5], lista_end[6], customer_id,)
